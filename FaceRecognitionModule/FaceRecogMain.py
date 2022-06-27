@@ -7,18 +7,8 @@ import numpy as np
 import time
 from datetime import datetime, timedelta
 
-INTERVAL = 1
-
-SCALE_PERCENT = 1# percent of original size
-
-# get paths of each file in folder named Images
-image_paths = list(paths.list_images('./Images'))
-face_data = {}
-known_names = []
-known_encodings = []
-
-
-def match_user_using_webcam(face_data_path):
+def match_users_using_webcam():
+    face_data_path = "./FaceDatabase/face_embeddings_2.pickle"
     casc_face_path = "./Required/haarcascade_frontalface_alt2.xml"
     face_cascade = cv2.CascadeClassifier(casc_face_path)
     face_data = pickle.loads(open(face_data_path, "rb").read())
@@ -70,13 +60,15 @@ def match_user_using_webcam(face_data_path):
     cap.release()
     cv2.destroyAllWindows()
 
-
-def match_user(img_path):
-    face_data_path = "./FaceDatabase/face_embeddings.pickle"
+def match_user(img_rgb):
+    face_data_path = "./FaceDatabase/face_embeddings_lala.pickle"
     face_data = pickle.loads(open(face_data_path, "rb").read())
-    img = cv2.imread(img_path)
-    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # img = cv2.imread(img_path)
+    # img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     embedding = get_embedding(img_rgb)
+    if embedding == -1:
+        print("No face / Multiple face found!")
+        return
     matches = False
     for k, v in face_data.items():
         dist = np.linalg.norm(v-embedding[0])
@@ -88,10 +80,7 @@ def match_user(img_path):
         #     return k
     return "No match found !"
 
-
 def get_embedding(img_rgb):
-
-
 
     boxes = face_recognition.face_locations(img_rgb, model='hog')
     if len(boxes) > 1 or len(boxes) == 0:
@@ -99,59 +88,95 @@ def get_embedding(img_rgb):
     encoding = face_recognition.face_encodings(img_rgb, boxes)
     return encoding
 
-def add_users(img_rgb, name):
+def add_user(img_rgb, name):
     # check for existing database
-    if os.path.exists("./FaceDatabase/face_embeddings.pickle"):
-        with open("./FaceDatabase/face_embeddings.pickle") as db:
+    database_path = "./FaceDatabase/face_embeddings.pickle"
+    if os.path.exists(database_path):
+        with open(database_path, 'rb') as db:
             face_data = pickle.load(db)
             if name in face_data:
-                print("Name already exists!")
+                print(f"User {name} already exists!")
                 return
+    else:
+        # create new database
+        face_data = {}
+    # compute the facial embedding for the face
     encoding = get_embedding(img_rgb)
     if encoding == -1:
         print("Multiple face found / No face found!")
         return
 
-
-
-# loop over the image paths
-for(i, image_path) in enumerate(image_paths):
-    #extract name from path
-    name = image_path.split(os.path.sep)[-2]
-    #print(name)
-    #load images & convert from bgr to rgb
-    image = cv2.imread(image_path)
-    img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-    encoding = get_embedding(img_rgb)
-    if encoding == -1:
-        print("Multiple face found or No face found!!")
-        break
-    #print(encoding)
-    #print(encoding[0].shape)
-
-    known_encodings.append(encoding[0])
-    known_names.append(name)
-
     #save the encoding(numpy array) into a dictionary
     face_data[name] = encoding[0]
+    #use pickle to save data into a file for later use
+    f = open(database_path, "wb")
+    f.write(pickle.dumps(face_data))
+    f.close()
+    print(f"user {name} added successfully!")
 
-# save data in another format
-data = {"encodings":known_encodings, "names": known_names}
+def add_multiple_users(image_paths):
+    face_data_path = "./FaceDatabase/face_embeddings.pickle"
+    face_data_2_path = "./FaceDatabase/face_embeddings_2.pickle"
 
-#use pickle to save data into a file for later use
-f = open("./FaceDatabase/face_embeddings.pickle", "wb")
-f.write(pickle.dumps(face_data))
-f.close()
-# save data in another format
-f = open("./FaceDatabase/face_embeddings_2.pickle", "wb")
-f.write(pickle.dumps(data))
-f.close()
+    face_data = {}
+    known_names = []
+    known_encodings = []
+    # loop over the image paths
+    for(i, image_path) in enumerate(image_paths):
+        #extract name from path
+        name = image_path.split(os.path.sep)[-2]
+        #print(name)
+        #load images & convert from bgr to rgb
+        image = cv2.imread(image_path)
+        img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        encoding = get_embedding(img_rgb)
+        if encoding == -1:
+            print("Multiple face found or No face found!!")
+            break
+        #print(encoding)
+        #print(encoding[0].shape)
 
-###match user from photo
-#match = match_user("TestImages/opu1.jpg")
+        known_encodings.append(encoding[0])
+        known_names.append(name)
 
+        #save the encoding(numpy array) into a dictionary
+        face_data[name] = encoding[0]
+        print(f"User {name} added!")
 
-## match user from webcam
-match_user_using_webcam("FaceDatabase/face_embeddings_2.pickle")
-# print(match)
+    # save data in another format
+    face_data_2 = {"encodings":known_encodings, "names": known_names}
+
+    #use pickle to save data into a file for later use
+    f = open(face_data_path, "wb")
+    f.write(pickle.dumps(face_data))
+    f.close()
+    # save data in another format
+    f = open(face_data_2_path, "wb")
+    f.write(pickle.dumps(face_data_2))
+    f.close()
+
+if __name__ == "__main__":
+
+    # # get paths of each file in folder named Images & add multiple users
+    # image_paths = list(paths.list_images('./Images'))
+    # add_multiple_users(image_paths)
+
+    # # add new user
+    # name = "rukon"
+    # img_path = "./Images/rukon/rukon.jpg"
+    # img = cv2.imread(img_path)
+    # img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    # add_user(img_rgb, name)
+
+    # match user from photo
+    image_paths = list(paths.list_images('./TestImages'))
+    for image_path in image_paths:
+
+        img = cv2.imread(image_path)
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        match = match_user(img_rgb)
+        print(image_path.split('/')[-1])
+        print(match)
+
+    # # match user from webcam
+    # match_users_using_webcam()
