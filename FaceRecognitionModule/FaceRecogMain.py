@@ -27,7 +27,7 @@ def match_users_using_webcam():
         names = []
         for encoding in encodings:
             matches = face_recognition.compare_faces(face_data["encodings"],
-                                                     encoding, tolerance=0.5)
+                                                     encoding, tolerance=0.6)
             name = "Unknown"
             # check to see if we have found a match
             if True in matches:
@@ -168,15 +168,15 @@ if __name__ == "__main__":
     # img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # add_user(img_rgb, name)
 
-    # match user from photo
-    image_paths = list(paths.list_images('./TestImages'))
-    for image_path in image_paths:
+    # # match user from photo
+    # image_paths = list(paths.list_images('./TestImages'))
+    # for image_path in image_paths:
+    #
+    #     img = cv2.imread(image_path)
+    #     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    #     match = match_user(img_rgb)
+    #     print(image_path.split('/')[-1])
+    #     print(match)
 
-        img = cv2.imread(image_path)
-        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        match = match_user(img_rgb)
-        print(image_path.split('/')[-1])
-        print(match)
-
-    # # match user from webcam
-    # match_users_using_webcam()
+    # match user from webcam
+    match_users_using_webcam()
