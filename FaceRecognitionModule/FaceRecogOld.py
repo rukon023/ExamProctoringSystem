@@ -8,12 +8,12 @@ import time
 from datetime import datetime, timedelta
 
 def match_users_using_webcam():
-    face_data_path = "./FaceDatabase/face_embeddings_2.pickle"
-    casc_face_path = "./Required/haarcascade_frontalface_alt2.xml"
+    face_data_path = r"F:\ExamProctoringSystem\FaceRecognitionModule\FaceDatabase\face_embeddings_2.pickle"
+    casc_face_path = "F:\ExamProctoringSystem\FaceRecognitionModule\Required\haarcascade_frontalface_default.xml"
     face_cascade = cv2.CascadeClassifier(casc_face_path)
     face_data = pickle.loads(open(face_data_path, "rb").read())
     print("Streaming started!")
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
     while True:
         ret, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -168,10 +168,10 @@ if __name__ == "__main__":
     # img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # add_user(img_rgb, name)
 
-    # # match user from photo
+    # match user from photo
     # image_paths = list(paths.list_images('./TestImages'))
     # for image_path in image_paths:
-    #
+
     #     img = cv2.imread(image_path)
     #     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     #     match = match_user(img_rgb)

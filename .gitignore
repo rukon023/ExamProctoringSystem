@@ -127,3 +127,16 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+*.h5
+*.bz2
+*.h503yv_oe_tmp
+DeepFace/.deepface/weights/shape_predictor_5_face_landmarks.dat
+FaceRecognitionModule/DeepFace/.deepface/weights/shape_predictor_5_face_landmarks.dat
+FaceRecognitionModule/FaceDatabase/Rukhonn Ali/Rukhonn Ali_0.jpg
+FaceRecognitionModule/FaceDatabase/Rukhonn Ali/Rukhonn Ali_1.jpg
+FaceRecognitionModule/FaceDatabase/Rukhonn Ali/Rukhonn Ali_2.jpg
+FaceRecognitionModule/FaceDatabase/Rukhonn Ali/Rukhonn Ali_3.jpg
+FaceRecognitionModule/FaceDatabase/Rukhonn Ali/Rukhonn Ali_4.jpg
+FaceRecognitionModule/FaceDatabase/rukon/Rukhonn Ali_2.jpg
+FaceRecognitionModule/FaceDatabase/rukon/Rukhonn Ali_3.jpg
+FaceRecognitionModule/FaceDatabase/rukon/Rukhonn Ali_4.jpg
