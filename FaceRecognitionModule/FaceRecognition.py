@@ -1,16 +1,16 @@
 from imutils import paths
-import face_recognition
+#import face_recognition
 import pickle
 import cv2
 import os
-import dlib
+#import dlib
 import sys
 import time
 from deepface import DeepFace
 from deepface.commons import functions, realtime, distance as dst
 from deepface.detectors import FaceDetector
 
-BASE_PATH = r"F:\ExamProctoringSystem\FaceRecognitionModule"
+BASE_PATH = r"E:\FinalProject\Finalcode\ExamProctoringSystem\FaceRecognitionModule"
 image_paths = list(paths.list_images('Images'))
 DATABASE_PATH = os.path.join(BASE_PATH, "FaceDatabase")
 predictor_path = "Required/shape_predictor_5_face_landmarks.dat"
@@ -20,7 +20,7 @@ models = ["VGG-Face", "Facenet", "Facenet512", "OpenFace",
           "DeepFace", "DeepID", "ArcFace", "Dlib", "SFace"]
 # face detectors
 detectors = ["opencv", "ssd", "mtcnn", "dlib", "retinaface"]
-test_img_path = "F:\ExamProctoringSystem\FaceRecognitionModule\TestImages\whosethis.jpg"
+test_img_path = "E:\FinalProject\Finalcode\ExamProctoringSystem\FaceRecognitionModule\TestImages\muza.jpg"
 
 # # face recognition
 # df = DeepFace.find(test_img_path, db_path=DATABASE_PATH, model_name=models[2], detector_backend=backends[2], align=False,
@@ -129,7 +129,7 @@ def match_user_using_webcam():
 
 
 if __name__ == "__main__":
-    # add_user_using_webcam()
-    # match_user_using_webcam()
-    match_user()
-    pass
+    #add_user_using_webcam()
+    match_user_using_webcam()
+    #match_user()
+    #pass
