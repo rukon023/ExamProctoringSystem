@@ -8,15 +8,13 @@ import pandas
 import torch
 import numpy as np
 
-test_data_path = r"F:\ExamProctoringSystem\VoiceAcitivityDetection\test_data\temp_output_speech.wav"
+# test_data_path = r"F:\ExamProctoringSystem\VoiceAcitivityDetection\test_data\temp_output_speech.wav"
 vad = Pipeline.from_pretrained("pyannote/voice-activity-detection")
-output = vad(test_data_path)
+# output = vad(test_data_path)
+# print(dir(vad))
 
 
-# for speech in output.get_timeline().support():
-#     print(speech)
-
-def load_audio():
+def detect_speech():
     sample_rate = 16000
     seconds = 5
     for i in range(3, 0, -1):
@@ -29,12 +27,9 @@ def load_audio():
     # wait until recording is finished
     sd.wait()
     print("Recording finished!")
-    myrecording = np.reshape(myrecording, (1, 32000))
-    print(myrecording.shape)
+    myrecording = np.reshape(myrecording, (1, 80000))
+    # print(myrecording.shape)
     myrecording = torch.from_numpy(myrecording)
-    print(myrecording.shape)
-    print(type(myrecording))
-    print(myrecording)
 
     # waveform, sample_rate = torchaudio.load(test_data_path)
     # # print(type(waveform))
@@ -43,8 +38,11 @@ def load_audio():
 
     audio_in_memory = {"waveform": myrecording, "sample_rate": sample_rate}
     output = vad(audio_in_memory)
-    print(output.get_timeline())
+    # print("="*100)
+    # print(output.get_timeline().support())
+    return output.label_duration("SPEECH")
 
 
 if __name__ == "__main__":
-    load_audio()
+    speech_duration = detect_speech()
+    print(speech_duration)
