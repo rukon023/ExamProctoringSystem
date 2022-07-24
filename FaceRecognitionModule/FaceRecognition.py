@@ -116,7 +116,7 @@ def add_user_using_webcam():
 def match_user():
     test_img_path = "F:\ExamProctoringSystem\FaceRecognitionModule\TestImages\opu2.jpg"
     df = DeepFace.find(test_img_path, DATABASE_PATH,
-                        model_name='Facenet',
+                       model_name='Facenet',
                        distance_metric="euclidean_l2",
                        )
     print(df["identity"][0])
@@ -129,7 +129,12 @@ def match_user_using_webcam():
 
 
 if __name__ == "__main__":
-    #add_user_using_webcam()
-    match_user_using_webcam()
-    #match_user()
-    #pass
+    choice = int(input(
+        f"Choices: \n1. Add New User(1)\n2. Match User using webcam\n3. Match User(3):"))
+    if choice == 1:
+        add_user_using_webcam()
+    elif choice == 2:
+        match_user_using_webcam()
+    elif choice == 3:
+        match_user()
+    # pass
