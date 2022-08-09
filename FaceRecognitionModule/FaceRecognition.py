@@ -11,9 +11,10 @@ from deepface import DeepFace
 from deepface.commons import functions, realtime, distance as dst
 from deepface.detectors import FaceDetector
 
-BASE_PATH = r"E:\FinalProject\Finalcode\ExamProctoringSystem\FaceRecognitionModule"
+BASE_PATH = r"F:\ExamProctoringSystem\FaceRecognitionModule"
 image_paths = list(paths.list_images('Images'))
 DATABASE_PATH = os.path.join(BASE_PATH, "FaceDatabase")
+
 predictor_path = "Required/shape_predictor_5_face_landmarks.dat"
 backends = ['opencv', 'ssd', 'dlib', 'mtcnn', 'retinaface', 'mediapipe']
 metrics = ["cosine", "euclidean", "euclidean_l2"]
@@ -124,6 +125,22 @@ def match_user():
     print(df["identity"][0])
     pass
 
+def match_user_from_img(img_rgb):
+    df = DeepFace.find(img_rgb, DATABASE_PATH,
+                    model_name='VGG-Face',
+                    distance_metric="euclidean_l2",
+                    detector_backend="mtcnn",
+                    enforce_detection=False,
+                    prog_bar=True,
+                    silent=True,
+                    )
+    if df["VGG-Face_euclidean_l2"][0] > 0.6:
+        # print("<NoMatch>")
+        return "<NoMatch>"
+    else:
+        name = df["identity"][0].split("\\")[-1].split("/")[0]
+        # print(name)
+        return name
 
 def match_user_using_webcam():
     DeepFace.stream(DATABASE_PATH, enable_face_analysis=False)
@@ -137,6 +154,17 @@ if __name__ == "__main__":
         add_user_using_webcam()
     elif choice == 2:
         match_user_using_webcam()
+
     elif choice == 3:
-        match_user()
+        cap = cv2.VideoCapture(0)
+        while True:
+            ret, frame = cap.read()
+            img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            name = match_user_from_img(img_rgb)
+            print(name)
+            cv2.imshow("Image", frame)
+            if cv2.waitKey(1) == ord('q'):
+                break
+
+        
     # pass
