@@ -1,3 +1,4 @@
+from tkinter.tix import Tree
 from imutils import paths
 #import face_recognition
 import pickle
@@ -114,11 +115,12 @@ def add_user_using_webcam():
 
 
 def match_user():
-    test_img_path = "F:\ExamProctoringSystem\FaceRecognitionModule\TestImages\opu2.jpg"
+    
+    test_img_path = "E:\FinalProject\Finalcode\ExamProctoringSystem\FaceRecognitionModule\TestImages\Photo.jpg"
     df = DeepFace.find(test_img_path, DATABASE_PATH,
-                       model_name='Facenet',
-                       distance_metric="euclidean_l2",
-                       )
+                           model_name='Facenet',
+                           distance_metric="euclidean_l2",
+                           )
     print(df["identity"][0])
     pass
 

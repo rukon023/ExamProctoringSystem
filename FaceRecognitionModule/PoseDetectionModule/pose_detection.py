@@ -12,7 +12,7 @@ class PoseDetect():
     def findPose(self,image,draw = True):
         # Flip the image horizontally for a later selfie-view display
         # Also convert the color space from BGR to RGB
-        self.image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
+        self.image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
         #self.image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
 
         # To improve performance
@@ -71,39 +71,38 @@ class PoseDetect():
 
                 # Get angles
                 angles, mtxR, mtxQ, Qx, Qy, Qz = cv2.RQDecomp3x3(rmat)
-
                 # Get the y rotation degree
                 x = angles[0] * 360
                 y = angles[1] * 360
                 
                 #print("Ahnaf")
 
-                #print(x," ",y);
+                print(x," ",y);
                 lmlist.append([x,y]);
-                # See where the user's head tilting
-                # if y > 10:
-                #     text = "Looking Left"
-                #     print("Looking left")
-                # elif y < -10:
-                #     text = "Looking Right"
-                #     print("looking Right");
-                # elif x < -10:
-                #     print("Looking Down")
-                #     text = "Looking Down"
-                # else:
-                #     text = "Forward"
-                #     print("Looking Forward");
+                #See where the user's head tilting
+                if y > 10:
+                    text = "Looking Left"
+                    print("Looking left")
+                elif y < -10:
+                    text = "Looking Right"
+                    print("looking Right");
+                elif x < -10:
+                    print("Looking Down")
+                    text = "Looking Down"
+                else:
+                    text = "Forward"
+                    print("Looking Forward");
 
-                # # Display the nose direction
-                # nose_3d_projection, jacobian = cv2.projectPoints(nose_3d, rot_vec, trans_vec, cam_matrix, dist_matrix)
+                # Display the nose direction
+                nose_3d_projection, jacobian = cv2.projectPoints(nose_3d, rot_vec, trans_vec, cam_matrix, dist_matrix)
 
-                # p1 = (int(nose_2d[0]), int(nose_2d[1]))
-                # p2 = (int(nose_3d_projection[0][0][0]), int(nose_3d_projection[0][0][1]))
+                p1 = (int(nose_2d[0]), int(nose_2d[1]))
+                p2 = (int(nose_3d_projection[0][0][0]), int(nose_3d_projection[0][0][1]))
 
-                # cv2.line(image, p1, p2, (255, 0, 0), 2)
+                cv2.line(image, p1, p2, (255, 0, 0), 2)
 
-                # # # Add the text on the image
-                # cv2.putText(image, text, (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                # # Add the text on the image
+                cv2.putText(image, text, (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
         cv2.imshow('Head Pose Estimation', image)
         return lmlist
@@ -118,15 +117,15 @@ def main():
     while cap.isOpened():
         success, image = cap.read()
         lmlist = obj.findPose(image);
-        for x in lmlist:
-            if x[1]>10:
-                print("Looking Left");
-            elif x[1]<-10:
-                print("Looking Right");
-            elif x[0]<-10:
-                print("Looking Down");
-            else:
-                print("Looking Forward");
+        # for x in lmlist:
+        #     if x[1]>10:
+        #         print("Looking Left");
+        #     elif x[1]<-10:
+        #         print("Looking Right");
+        #     elif x[0]<-10:
+        #         print("Looking Down");
+        #     else:
+        #         print("Looking Forward");
         if cv2.waitKey(50) & 0xFF == ord('q'):
             break
     cap.release()

@@ -4,8 +4,8 @@ import numpy as np
 import torch
 import cv2
 
-YOLOV5_WEIGHTS_PATH = r"F:\ExamProctoringSystem\PhoneDetectionModule\yolov5\runs\train\exp2\weights\best.pt"
-YOLOV5_PATH = r"F:\ExamProctoringSystem\PhoneDetectionModule\yolov5"
+YOLOV5_WEIGHTS_PATH = r"E:\FinalProject\Finalcode\ExamProctoringSystem\PhoneDetectionModule\yolov5\runs\train\exp2\weights\best.pt"
+YOLOV5_PATH = r"E:\FinalProject\Finalcode\ExamProctoringSystem\PhoneDetectionModule\yolov5"
 
 
 def detect_phone_using_webcam():
